@@ -4,7 +4,7 @@ import pygame_textinput
 class Home:
     def run(self):
         while True:
-            self.screen_home.fill((0, 0, 0))
+            self.screen_home.fill((148, 0, 211))
             pygame.draw.rect(self.screen_home,"#ffffff",self.retangulo_xou)
             pygame.draw.rect(self.screen_home,"#ffffff",self.botao_entrar,0,10)
             pygame.draw.rect(self.screen_home,"#ffffff",self.botao_criar)

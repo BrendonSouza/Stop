@@ -1,6 +1,6 @@
 import pygame
-import pygame_textinput 
-from src.home import Home
+ 
+from src.views.home import Home
 class Main:
     def setup(self):
 
