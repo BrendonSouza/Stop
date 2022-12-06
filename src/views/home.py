@@ -25,7 +25,6 @@ class Home:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if(self.verifica_click(self.botao_entrar,coord_x,coord_y)):
                         self.screen_main.tela= "entrar"
-                        print("clicou em entrar")
                         self.exit = True
                         break
 
