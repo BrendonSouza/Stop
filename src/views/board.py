@@ -1,13 +1,16 @@
 import pygame
 import pygame_textinput
+import json
 
 
 class Board:
-    def __init__(self, main, screen):
+    def __init__(self, main, screen,client):
         self.input_selected = 1
         self.exit = False
         self.screen_board = screen
         self.screen_main = main
+        self.Client = client
+        self.ClickedStop = False
         self.letra_sorteada = 'A'
 
 
@@ -108,8 +111,15 @@ class Board:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.verifica_colisao_input(coord_x, coord_y)
                 if event.type == pygame.QUIT:
+                    print("Saindo...")
+                    self.Client.destroy()
                     exit()
-
+           
+            if self.Client.stop:
+                self.Client.envia_mensagem(self.make_response())
+                print("enviei a mensagem")
+                self.screen_main.tela ="home"
+                break
             pygame.display.update()
 
     def verifica_input_selecionado(self):
@@ -131,8 +141,8 @@ class Board:
             self.input_8.update(self.events)
         elif (self.input_selected == 9):
             self.input_9.update(self.events)
-        else:
-            self.input_1.update(self.events)
+       
+           
 
     def verifica_colisao_input(self, coord_x, coord_y):
         if self.retangulo_1.collidepoint(coord_x, coord_y):
@@ -154,8 +164,68 @@ class Board:
         elif self.retangulo_9.collidepoint(coord_x, coord_y):
             self.input_selected = 9
         elif self.stop_rect.collidepoint(coord_x, coord_y):
-            print("Stop")
+            obj =self.set_stop()
+            self.Client.envia_mensagem(obj)
+         
 
+    def set_stop(self):
+        obj = {
+            "length": 2048,
+            "data":{
+                "type": "stop"
+            }
+        }
+        return json.dumps(obj)
+        
+    def make_response(self):
+        obj = {
+                "length": 2048,
+                "data":{
+                    "type": "response",
+                    "name": self.Client.name,
+                    # inputs Profissão, Cep...
+                    "inputs":[
+                        {
+                            "name": "Profissão",
+                            "value": self.input_1.value
+                        },
+                        {
+                            "name": "Cep",
+                            "value": self.input_2.value
+                        },
+                        {
+                            "name": "Animal",
+                            "value": self.input_3.value
+                        },
+                        {
+                            "name": "Comida",
+                            "value": self.input_4.value
+                        },
+                        {
+                            "name": "Filmes e Séries",
+                            "value": self.input_5.value
+                        },
+                        {
+                            "name": "Minha Sogra é",
+                            "value": self.input_6.value
+                        },
+                        {
+                            "name": "Cores",
+                            "value": self.input_7.value
+                        },
+                        {
+                            "name": "Nome",
+                            "value": self.input_8.value
+                        },
+                        {
+                            "name": "Famosos",
+                            "value": self.input_9.value
+                        }
+                    ]
+
+                }
+            }
+        return json.dumps(obj)
     def define_rect(self):
         self.label_1_rect = self.label_1.get_rect()
         self.label_2_rect = self.label_2.get_rect()

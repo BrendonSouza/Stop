@@ -1,5 +1,6 @@
 import pygame
 import pygame_textinput 
+import json
 
 class Home:
     def run(self):
@@ -25,7 +26,11 @@ class Home:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if(self.verifica_click(self.botao_entrar,coord_x,coord_y)):
                         self.screen_main.tela= "entrar"
+                        mensagem = self.name_input.value
+                        self.screen_main.client.name = mensagem
+                        self.send(mensagem)
                         self.exit = True
+                        
                         break
 
             if(self.exit):
@@ -33,17 +38,27 @@ class Home:
 
     def verifica_click(self,botao,x,y):
         return botao.collidepoint(x,y)
+    
+    def send(self,mensagem):
+        obj = {
+            "length": 2048,
+            "data":{
+                "type": "send_name",
+                "name": mensagem
+            }
+        }
+        self.screen_main.client.envia_mensagem(json.dumps(obj))
 
     def __init__(self,main,screen):
             self.exit = False
             self.screen_home = screen
             self.screen_main = main
-            self.name_input = pygame_textinput.TextInputVisualizer()
             # text Nome
             self.nome_font = pygame.font.SysFont("Arial", 18)
             self.text_nome = self.nome_font.render("Nome:", True, "#ffffff")
             self.text_nome_rect = self.text_nome.get_rect()
             self.text_nome_rect.center = ((1280*0.173),330)
+            self.name_input = pygame_textinput.TextInputVisualizer()
             self.name_input.font_color = "#000000"
             self.name_input.cursor_color = "#000000"
             self.retangulo_xou = pygame.Rect(0,0,250,30)
