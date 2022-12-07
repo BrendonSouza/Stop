@@ -1,4 +1,5 @@
 import socket
+import json
 from _thread import *
 import threading
 class Server:
@@ -8,6 +9,8 @@ class Server:
         self.port = 2004
         self.ThreadCount = 0
         self.clients=[]
+        self.dicionario = {}
+        self.responses = []
 
         try:
             self.ServerSideSocket.bind((self.host, self.port))
@@ -19,55 +22,49 @@ class Server:
         
     def execute(self):
         while True:
-            Client, address = self.ServerSideSocket.accept()
+            Client, address = self.ServerSideSocket.accept() 
             self.clients.append(Client)
-            # TODO: remove unused threads(threads that are not connected to any client or the client is disconnected)
-            
-            # self.clients.append(address[0])
             print('Connected to: ' + address[0] + ':' + str(address[1]))
             start_new_thread(self.multi_threaded_client, (Client, ))
-            self.ThreadCount += 1
-            print('Thread Number: ' + str(self.ThreadCount))
-            
-            
-            # if(address[0] not in self.clients):
-            #     self.clients.append(address[0])
-            #     print('Connected to: ' + address[0] + ':' + str(address[1]))
-            #     start_new_thread(self.multi_threaded_client, (Client, ))
-            #     self.ThreadCount += 1
-            #     print('Thread Number: ' + str(self.ThreadCount))
-            # else:
-            #     print("Client already connected")
-                # find the thread that is connected to the client
-                # and send the message to that thread
-                #Client.send(str.encode("Client already connected"))
                 
-
-
         self.ServerSideSocket.close()
     
+
+    def find_client(self, connection):
+        for client in self.dicionario.items():
+            if(client[1] == connection):
+                return client[0]
+      
+
     def multi_threaded_client(self,connection):
-        connection.send(str.encode('Server is working:'))
+        
+        connection.send(str.encode(json.dumps({"length": 2048, "data": {"type": "connection_established"}})))
         while True:
-            self.data = connection.recv(2048)
-            self.response = 'Server message: ' + self.data.decode('utf-8')
-            self.find_thread()
-            if not self.data:
-                break
-            if(self.data.decode('utf-8')=="stop"):
-                # send to all clients that the game is over
-                for client in self.clients:
-                    client.send(str.encode("stop == true"))
-                
-
-
-
-                
-            connection.sendall(str.encode(self.response))
-        connection.close()
-
-    def find_thread(self):
-       print(threading.enumerate())
+            self.data = connection.recv(2048).decode('utf-8')
+            if(self.data):
+                obj =  json.loads(self.data)
+                tipo = obj["data"]["type"]
+                if(tipo == "find_server"):
+                    self.client.send(str.encode("server_found"))
+                elif(tipo == "send_name"):
+                    self.dicionario.update({obj["data"]["name"]:connection})
+                    print(self.dicionario)
+                elif(tipo == "stop"):
+                    print("enviou")
+                    for client in self.clients:
+                        response = {
+                            "length": 2048,
+                            "data": {
+                                "type": "response",
+                                "stop": True,
+                                "name_request_stop": self.find_client(connection),
+                            }
+                        }
+                        client.send((json.dumps(response).encode('utf-8')))
+                elif(tipo == "response"):
+                    self.responses.append(obj["data"])
+                    
+        connection.close()            
        
 
 
