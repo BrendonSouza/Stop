@@ -26,7 +26,7 @@ class Board:
         while True:
             self.screen_board.fill((148, 0, 211))
             self.font = pygame.font.SysFont('Arial', 20)
-            self.titulo = self.font.render('Palavras com a letra: '+ self.Client.sorted_letter, True, (0, 0, 0))
+            self.titulo = self.font.render('Palavras com a letra: '+ self.Client.sorted_letter, True, (255, 255, 255))
             self.titulo_rect = self.titulo.get_rect()
             self.titulo_rect.center = (self.screen_board.get_width() / 2, 50)
 
