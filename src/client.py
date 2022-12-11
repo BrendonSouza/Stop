@@ -50,13 +50,15 @@ class Client():
                         
                     elif(response["data"]["type"]=="validate_response"):
                         self.responsesForValidate = response["data"]["responses"]
-                        print(self.responsesForValidate)
+                    elif(response["data"]["type"]=="score"):
+                        self.ranking = response["data"]["ranking"]
+                        print(self.ranking)
                         
      
             except Exception as e:
-                print("Exceprion: ")
+
                 print(e)
-                # print("Connection closed")
+                print("Connection closed")
                 break
         
 

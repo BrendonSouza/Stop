@@ -108,18 +108,18 @@ class Verify_board:
                             clock.tick(60)
                             pygame.display.update()
                 self.end = True
-                # response = {
-                #     "data":{
-                #         "type":"invalid_responses",
-                #         "responses": self.invalid_responses
-                #     }
-                # }
-                # self.client.envia_mensagem(json.dumps(response))
+                response = {
+                    "data":{
+                        "type":"invalid_responses",
+                        "responses": self.invalid_responses
+                    }
+                }
+                self.client.envia_mensagem(json.dumps(response))
             
                
             text_end = self.textFont.render("FIM DO JOGO", True, "#ffffff") 
             text_end_rect = text_end.get_rect()
-            text_end_rect.center = (self.screen_board.get_width()/2, self.screen_board.get_height()/2)
+            text_end_rect.center = (self.screen_board.get_width()/2, self.screen_board.get_height()*0.25)
             self.screen_board.blit(text_end, text_end_rect)
 
             
@@ -127,7 +127,22 @@ class Verify_board:
                 text_await_server = self.textFont.render("Aguardando cálculo do ranking...", True, "#ffffff") 
                 text_await_server_rect = text_await_server.get_rect()
                 text_await_server_rect.center = (self.screen_board.get_width()/2, self.screen_board.get_height()/2+100)
-                self.screen_board.blit(text_await_server, text_1_rect)
+                self.screen_board.blit(text_await_server, text_await_server_rect)
+                pygame.display.flip()
+            else:
+                text_ranking = self.textFont.render("Ranking: ", True, "#ffffff")
+                text_ranking_rect = text_ranking.get_rect()
+                text_ranking_rect.center = (self.screen_board.get_width()/2, self.screen_board.get_height()/2+100)
+                self.screen_board.blit(text_ranking, text_ranking_rect)
+                i=0
+                for player in self.client.ranking:
+                    i+=1
+                    text_ranking = self.textFont.render(str(i)+" - "+ player["name"] + "  --------  " + str(player["score"]), True, "#ffffff")
+                    text_ranking_rect = text_ranking.get_rect()
+                    text_ranking_rect.center = (self.screen_board.get_width()/2, self.screen_board.get_height()/2+100+i*20)
+                    self.screen_board.blit(text_ranking, text_ranking_rect)
+                                    
+                
 
             pygame.display.update()
     

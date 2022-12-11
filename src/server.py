@@ -15,6 +15,8 @@ class Server:
         self.responses_categories = {}
         self.dicionario = {}
         self.responses = []
+        self.invalid_responses={}
+        self.invalid_responses_received_count = 0
 
         try:
             self.ServerSideSocket.bind((self.host, self.port))
@@ -96,6 +98,7 @@ class Server:
                     elif (tipo == "response"):
                         self.responses.append(obj["data"])
                         if (len(self.responses) == len(self.clients)):
+                            
                             self.split_responses_in_groups()
                             response = {
                                 "length": 4096,
@@ -104,13 +107,10 @@ class Server:
                                     "responses": self.responses_categories,
                                 }
                             }
-                            print(self.responses)
                             for client in self.clients:
                                 client.send((json.dumps(response).encode('utf-8')))
 
-                            # for client in self.clients:
-                            #     print(self.input_responses)
-                        # connection.send((json.dumps(response).encode('utf-8')))
+
 
                     elif (tipo == "verify_number_of_players"):
                         response = {
@@ -132,6 +132,26 @@ class Server:
                                 }
                             }
                             client.send((json.dumps(response).encode('utf-8')))
+                    
+                    elif(tipo == "invalid_responses"):
+                        print(obj["data"]["responses"])
+                        self.invalid_responses_received_count+=1
+                        received_invalid_responses = obj["data"]["responses"]
+                        for key in received_invalid_responses:
+                            self.invalid_responses[key].extend(received_invalid_responses[key])
+
+
+                        if(self.invalid_responses_received_count == len(self.clients)):
+                            rank = self.score()
+                            response = {
+                                "data":{
+                                    "type":"score",
+                                    "ranking": rank
+                                }
+                            }
+                            for client in self.clients:
+                                client.send((json.dumps(response).encode('utf-8')))
+                    
             except Exception as e:
                 print(e)
                 break
@@ -178,9 +198,50 @@ class Server:
                 self.responses_categories[input["name"]].append(input["value"])
             else:
                 self.responses_categories[input["name"]] = [input["value"]]
+        
+        # add responses_categories keys to invalid_responses
+        for key in self.responses_categories.keys():
+                self.invalid_responses[key] = []
+        
 
     def score(self):
-        invalid_responses ={}
+        ranking = []
+        for key in self.invalid_responses:
+            values = self.invalid_responses[key]
+            for value in values:
+                cont = 0
+                for i in range(0, len(values)):
+                    if value == values[i]:
+                        cont += 1
+                if cont < int(len(self.clients)/2):
+                    self.invalid_responses[key].remove(value)
+                else:
+                    self.invalid_responses[key].remove(value)
+
+        for response in self.responses:
+            score = 0
+            for input in response["inputs"]:
+                if input["value"] in self.invalid_responses[input["name"]]:
+                    score -= 1
+                else:
+                    score+= 1
+            
+            ranking.append({"name": response["name"], "score": score})
+        
+        ranking = sorted(ranking, key=lambda k: k['score'], reverse=False)
+        return ranking
+        
+    
+                        
+                   
+            # verify if in the dictionary[key] there is a value repeated
+            
+
+      
+      
+
+       
+
 
 
     def __init__(self):
