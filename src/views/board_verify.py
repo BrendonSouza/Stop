@@ -14,6 +14,15 @@ class Verify_board:
         self.end = False
         self.responsesForValidate = {}
         self.invalid_responses = {}
+        self.color_rect1 = (255, 255, 255)
+        self.color_rect2 = (255, 255, 255)
+        self.color_rect3 = (255, 255, 255)
+        self.color_rect4 = (255, 255, 255)
+        self.color_rect5 = (255, 255, 255)
+        self.color_rect6 = (255, 255, 255)
+        self.color_rect7 = (255, 255, 255)
+        self.color_rect8 = (255, 255, 255)
+        self.color_rect9 = (255, 255, 255)
 
         self.define_rect_and_subsurfaces()
 
@@ -86,10 +95,10 @@ class Verify_board:
                     pygame.time.set_timer(pygame.USEREVENT, 1000)
                     counter = 5
                     changeContent = True
-                    
+                    self.reset_rect_color()
                     while changeContent:
-                        pygame.draw.rect(self.screen_board, (255, 255, 255), self.retangulo_1)
-                        pygame.draw.rect(self.screen_board, (255, 255, 255), self.retangulo_2)
+                        pygame.draw.rect(self.screen_board, self.color_rect1, self.retangulo_1)
+                        pygame.draw.rect(self.screen_board, self.color_rect2, self.retangulo_2)
                         text_1 = self.textFont.render(value[0], True, "#000000")     
                         text_1_rect = text_1.get_rect()
                         text_1_rect.center = self.retangulo_1.center
@@ -99,43 +108,43 @@ class Verify_board:
                         self.screen_board.blit(text_1, text_1_rect)
                         self.screen_board.blit(text_2, text_2_rect)
                         if(self.client.number_of_players >= 3):
-                            pygame.draw.rect(self.screen_board, (255, 255, 255), self.retangulo_3)
+                            pygame.draw.rect(self.screen_board, self.color_rect3, self.retangulo_3)
                             text_3 = self.textFont.render(value[2], True, "#000000")
                             text_3_rect = text_3.get_rect()
                             text_3_rect.center = self.retangulo_3.center
                             self.screen_board.blit(text_3, text_3_rect)
                         if(self.client.number_of_players >= 4):
-                            pygame.draw.rect(self.screen_board, (255, 255, 255), self.retangulo_4)
+                            pygame.draw.rect(self.screen_board, self.color_rect4, self.retangulo_4)
                             text_4 = self.textFont.render(value[3], True, "#000000")
                             text_4_rect = text_4.get_rect()
                             text_4_rect.center = self.retangulo_4.center
                             self.screen_board.blit(text_4, text_4_rect)
                         if(self.client.number_of_players >= 5):
-                            pygame.draw.rect(self.screen_board, (255, 255, 255), self.retangulo_5)
+                            pygame.draw.rect(self.screen_board, self.color_rect5, self.retangulo_5)
                             text_5 = self.textFont.render(value[4], True, "#000000")
                             text_5_rect = text_5.get_rect()
                             text_5_rect.center = self.retangulo_5.center
                             self.screen_board.blit(text_5, text_5_rect)
                         if(self.client.number_of_players >= 6):
-                            pygame.draw.rect(self.screen_board, (255, 255, 255), self.retangulo_6)
+                            pygame.draw.rect(self.screen_board, self.color_rect6, self.retangulo_6)
                             text_6 = self.textFont.render(value[5], True, "#000000")
                             text_6_rect = text_6.get_rect()
                             text_6_rect.center = self.retangulo_6.center
                             self.screen_board.blit(text_6, text_6_rect)
                         if(self.client.number_of_players >= 7):
-                            pygame.draw.rect(self.screen_board, (255, 255, 255), self.retangulo_7)
+                            pygame.draw.rect(self.screen_board, self.color_rect7, self.retangulo_7)
                             text_7 = self.textFont.render(value[6], True, "#000000")
                             text_7_rect = text_7.get_rect()
                             text_7_rect.center = self.retangulo_7.center
                             self.screen_board.blit(text_7, text_7_rect)
                         if(self.client.number_of_players >= 8):
-                            pygame.draw.rect(self.screen_board, (255, 255, 255), self.retangulo_8)
+                            pygame.draw.rect(self.screen_board, self.color_rect8, self.retangulo_8)
                             text_8 = self.textFont.render(value[7], True, "#000000")
                             text_8_rect = text_8.get_rect()
                             text_8_rect.center = self.retangulo_8.center
                             self.screen_board.blit(text_8, text_8_rect)
                         if(self.client.number_of_players == 9):
-                            pygame.draw.rect(self.screen_board, (255, 255, 255), self.retangulo_9)
+                            pygame.draw.rect(self.screen_board, self.color_rect9, self.retangulo_9)
                             text_9 = self.textFont.render(value[8], True, "#000000")
                             text_9_rect = text_9.get_rect()
                             text_9_rect.center = self.retangulo_9.center
@@ -192,24 +201,45 @@ class Verify_board:
 
             pygame.display.update()
     
+    def reset_rect_color(self):
+        self.color_rect1 = (255, 255, 255)
+        self.color_rect2 = (255, 255, 255)
+        self.color_rect3 = (255, 255, 255)
+        self.color_rect4 = (255, 255, 255)
+        self.color_rect5 = (255, 255, 255)
+        self.color_rect6 = (255, 255, 255)
+        self.color_rect7 = (255, 255, 255)
+        self.color_rect8 = (255, 255, 255)
+        self.color_rect9 = (255, 255, 255)
+        
     def verify_click_in_input(self,coord_x,coord_y,key,value):
         if self.retangulo_1.collidepoint(coord_x, coord_y):
+            #change color background to yellow
+            self.color_rect1 = (255,255,0)
             self.add_response(key,value[0])
         elif self.retangulo_2.collidepoint(coord_x, coord_y):
+            self.color_rect2 = (255,255,0)
             self.add_response(key,value[1])
         elif self.retangulo_3.collidepoint(coord_x, coord_y):
+            self.color_rect3 = (255,255,0)
             self.add_response(key,value[2])
         elif self.retangulo_4.collidepoint(coord_x, coord_y):
+            self.color_rect4 = (255,255,0)
             self.add_response(key,value[3])
         elif self.retangulo_5.collidepoint(coord_x, coord_y):
+            self.color_rect5 = (255,255,0)
             self.add_response(key,value[4])
         elif self.retangulo_6.collidepoint(coord_x, coord_y):
+            self.color_rect6 = (255,255,0)
             self.add_response(key,value[5])
         elif self.retangulo_7.collidepoint(coord_x, coord_y):
+            self.color_rect7 = (255,255,0)
             self.add_response(key,value[6])
         elif self.retangulo_8.collidepoint(coord_x, coord_y):
+            self.color_rect8 = (255,255,0)
             self.add_response(key,value[7])
         elif self.retangulo_9.collidepoint(coord_x, coord_y):
+            self.color_rect9 = (255,255,0)
             self.add_response(key,value[8])
             
             
