@@ -22,16 +22,19 @@ class Home:
             
             for event in events:
                 if event.type == pygame.QUIT:
+                    print("Saindo...")
+                    self.screen_main.client.destroy()
                     exit()
+                   
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if(self.verifica_click(self.botao_entrar,coord_x,coord_y)):
-                        self.screen_main.tela= "entrar"
                         mensagem = self.name_input.value
                         self.screen_main.client.name = mensagem
                         self.send(mensagem)
-                        self.exit = True
-                        
-                        break
+                        if(not self.screen_main.client.name_already_exists):
+                            self.screen_main.tela = "wait_room"
+                            self.exit = True
+                            break
 
             if(self.exit):
                 break

@@ -108,19 +108,19 @@ class Board:
             coord_x, coord_y = pygame.mouse.get_pos()
             # verificando eventos
             for event in self.events:
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    self.verifica_colisao_input(coord_x, coord_y)
                 if event.type == pygame.QUIT:
                     print("Saindo...")
                     self.Client.destroy()
                     exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.verifica_colisao_input(coord_x, coord_y)
+                    
            
+            pygame.display.update()
             if self.Client.stop:
                 self.Client.envia_mensagem(self.make_response())
-                print("enviei a mensagem")
-                self.screen_main.tela ="home"
+                self.screen_main.tela ="board_verify"
                 break
-            pygame.display.update()
 
     def verifica_input_selecionado(self):
         if (self.input_selected == 1):
