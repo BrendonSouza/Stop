@@ -17,6 +17,8 @@ class Client():
         self.ClientMultiSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.name_already_exists = False
         self.ranking = []
+        self.sorted_letter= ''
+        self.start_game = False
         print(ni.gateways()['default'][ni.AF_INET][0])
         self.run()
     
@@ -52,8 +54,9 @@ class Client():
                         self.responsesForValidate = response["data"]["responses"]
                     elif(response["data"]["type"]=="score"):
                         self.ranking = response["data"]["ranking"]
-                        print(self.ranking)
-                        
+                    elif(response["data"]["type"]=="start_game"):
+                        self.start_game = True
+                        self.sorted_letter = response["data"]["letter"]
      
             except Exception as e:
 

@@ -13,6 +13,7 @@ class Main:
             if(self.tela == "home"):
                 self.home.run()
             elif(self.tela=="entrar"):
+                time.sleep(3)
                 self.board.run()
             elif(self.tela=="wait_room"):
                 self.wait_room.run()

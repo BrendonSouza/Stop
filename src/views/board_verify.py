@@ -63,6 +63,11 @@ class Verify_board:
            
             self.screen_board.fill((148, 0, 211))
             
+            for event in self.events:
+                if event.type == pygame.QUIT:
+                    print("Saindo...")
+                    self.client.destroy()
+                    exit()
             if(not self.end):
             # itera no dictionario de respostas
                 

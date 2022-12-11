@@ -125,7 +125,6 @@ class Server:
                         letter = self.random_letters()
                         for client in self.clients:
                             response = {
-                                "length": 2048,
                                 "data": {
                                     "type": "start_game",
                                     "letter": letter,

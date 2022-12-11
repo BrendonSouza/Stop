@@ -11,14 +11,10 @@ class Board:
         self.screen_main = main
         self.Client = client
         self.ClickedStop = False
-        self.letra_sorteada = 'A'
+
 
 
         # Texto inicial
-        self.font = pygame.font.SysFont('Arial', 20)
-        self.titulo = self.font.render('Palavras com a letra: '+ self.letra_sorteada, True, (0, 0, 0))
-        self.titulo_rect = self.titulo.get_rect()
-        self.titulo_rect.center = (self.screen_board.get_width() / 2, 50)
 
         # Botão Stop
         self.stop = pygame.image.load('stop.png')
@@ -29,6 +25,10 @@ class Board:
     def run(self):
         while True:
             self.screen_board.fill((148, 0, 211))
+            self.font = pygame.font.SysFont('Arial', 20)
+            self.titulo = self.font.render('Palavras com a letra: '+ self.Client.sorted_letter, True, (0, 0, 0))
+            self.titulo_rect = self.titulo.get_rect()
+            self.titulo_rect.center = (self.screen_board.get_width() / 2, 50)
 
             self.events = pygame.event.get()
 
