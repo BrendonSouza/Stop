@@ -170,7 +170,6 @@ class Board:
 
     def set_stop(self):
         obj = {
-            "length": 2048,
             "data":{
                 "type": "stop"
             }
@@ -179,7 +178,6 @@ class Board:
         
     def make_response(self):
         obj = {
-                "length": 2048,
                 "data":{
                     "type": "response",
                     "name": self.Client.name,

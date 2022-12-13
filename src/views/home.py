@@ -44,7 +44,6 @@ class Home:
     
     def send(self,mensagem):
         obj = {
-            "length": 2048,
             "data":{
                 "type": "send_name",
                 "name": mensagem

@@ -43,7 +43,7 @@ class Server:
     def multi_threaded_client(self, connection):
 
         connection.send(str.encode(json.dumps(
-            {"length": 128, "data": {"type": "connection_established"}})))
+            {"data": {"type": "connection_established"}})))
         while True:
             try:
                 self.data = connection.recv(2048).decode('utf-8')
@@ -55,7 +55,7 @@ class Server:
                     elif (tipo == "send_name"):
                         if obj["data"]["name"] in self.dicionario:
                             response = {
-                                "length": 2048,
+                                
                                 "data": {
                                     "type": "name_already_exists",
                                     "value": True,
@@ -67,7 +67,7 @@ class Server:
                                 {obj["data"]["name"]: connection})
                             self.clients.append(connection)
                             response = {
-                                "length": 2048,
+                                
                                 "data": {
                                     "type": "name_already_exists",
                                     "value": False,
@@ -76,7 +76,7 @@ class Server:
                             connection.send((json.dumps(response).encode('utf-8')))
                         for client in self.clients:
                             response = {
-                                "length": 32,
+
                                 "data": {
                                     "type": "verify_number_of_players",
                                     "number_of_players": len(self.clients),
@@ -87,7 +87,7 @@ class Server:
                     elif (tipo == "stop"):
                         for client in self.clients:
                             response = {
-                                "length": 2048,
+                                
                                 "data": {
                                     "type": "response",
                                     "stop": True,
@@ -101,7 +101,7 @@ class Server:
                             
                             self.split_responses_in_groups()
                             response = {
-                                "length": 4096,
+
                                 "data": {
                                     "type": "validate_response",
                                     "responses": self.responses_categories,
@@ -114,7 +114,6 @@ class Server:
 
                     elif (tipo == "verify_number_of_players"):
                         response = {
-                            "length": 32,
                             "data": {
                                 "type": "verify_number_of_players",
                                 "number_of_players": len(self.clients),
@@ -171,7 +170,7 @@ class Server:
     def verify_connections(self):
         for client in self.clients:
             client.send(str.encode(json.dumps(
-                {"length": 2048, "data": {"type": "verify_connections"}})))
+                { "data": {"type": "verify_connections"}})))
             self.data = client.recv(2048).decode('utf-8')
             if (self.data):
                 obj = json.loads(self.data)
