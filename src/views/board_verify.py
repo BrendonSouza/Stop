@@ -65,6 +65,7 @@ class Verify_board:
         )*0.75, self.screen_board.get_height()/2 + 100)
 
         self.textFont = pygame.font.SysFont("Arial", 15)
+        self.cronFont = pygame.font.SysFont("Arial", 20)
 
     def run(self):
         self.responsesForValidate = self.client.responsesForValidate
@@ -93,10 +94,12 @@ class Verify_board:
                     # inicia um clock aqui e faz um while o clock for != 15
                     clock = pygame.time.Clock()
                     pygame.time.set_timer(pygame.USEREVENT, 1000)
-                    counter = 5
+                    counter = 15
                     changeContent = True
                     self.reset_rect_color()
                     while changeContent:
+                        
+
                         pygame.draw.rect(self.screen_board, self.color_rect1, self.retangulo_1)
                         pygame.draw.rect(self.screen_board, self.color_rect2, self.retangulo_2)
                         text_1 = self.textFont.render(value[0], True, "#000000")     
@@ -156,7 +159,15 @@ class Verify_board:
                                 self.verify_click_in_input(coord_x,coord_y,keys[i],value)
                             if(event.type == pygame.USEREVENT):
                                 counter -= 1
+                                text_rect_to_clear = pygame.Rect(0, 0, 170, 30)
+                                text_rect_to_clear.center = (self.screen_board.get_width()/2, self.screen_board.get_height()-70)
+                                pygame.draw.rect(self.screen_board, (148, 0, 211), text_rect_to_clear)
+                                text_cron = self.cronFont.render(str(counter), True, "#ffffff") 
                                 print(counter)
+                                text_cron_rect = text_cron.get_rect()
+                                text_cron_rect.center = (self.screen_board.get_width()/2, self.screen_board.get_height()-70)
+                                self.screen_board.blit(text_cron, text_cron_rect)
+                                
                                 if(counter<=0):
                                     changeContent = False
                                     break
